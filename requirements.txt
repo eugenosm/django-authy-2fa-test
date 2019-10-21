@@ -1,0 +1,8 @@
+Django==2.1.10
+django-extensions
+psycopg2
+djangorestframework==3.9.1
+django-allauth
+django-rest-auth
+authy
+
