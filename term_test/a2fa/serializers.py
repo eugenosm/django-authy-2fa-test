@@ -51,7 +51,7 @@ class RegisterSerializer(RegisterSerializer, PhoneMixin):
             phone=self.cleaned_data['phone'],
             country_code=self.cleaned_data['country_code'])
         if not auty_user.ok():
-            raise serializers.ErrorDetail('{}'.format(auty_user.errors()))
+            raise serializers.ValidationError(detail=auty_user.errors())
 
         adapter = get_adapter()
         user = adapter.new_user(request)
@@ -63,11 +63,17 @@ class RegisterSerializer(RegisterSerializer, PhoneMixin):
 
 
 class UserDetailsSerializer(serializers.ModelSerializer):
+    """
+    Impements /rest_auth/user/ endpoint
+    on GET/PUT: returns: 'email', 'username', 'auth_method', 'authy_id'
+    on PUT allow to change auth_method. values 'SMS' (sms confirm) and
+    'ATH'(authy one touch confirm)
+    """
 
     class Meta:
         model = User
         fields = ['email', 'username', 'auth_method', 'authy_id']
-        read_only_fields = ('username', 'authy_id')
+        read_only_fields = ('username', 'authy_id', 'email')
 
 
 class A2FAuthMethodSerializer(serializers.Serializer):

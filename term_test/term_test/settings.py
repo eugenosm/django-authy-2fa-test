@@ -141,6 +141,8 @@ REST_AUTH_SERIALIZERS = {
     "USER_DETAILS_SERIALIZER": "a2fa.serializers.UserDetailsSerializer",
 }
 
+# this is a bad thing to place security code here and push to git
+# i've done this way just cause this is test
 ACCOUNT_SECURITY_API_KEY = "1X6z5yLXgHmIzI46wF6ValfLIENJifpB"
 ACCOUNT_EMAIL_VERIFICATION = "none"
 
