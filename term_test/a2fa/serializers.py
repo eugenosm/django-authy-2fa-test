@@ -11,7 +11,6 @@ from authy.api import AuthyApiClient
 
 from a2fa.models import User
 
-
 authy_api = AuthyApiClient(settings.ACCOUNT_SECURITY_API_KEY)
 
 

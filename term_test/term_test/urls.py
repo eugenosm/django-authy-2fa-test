@@ -25,7 +25,6 @@ urlpatterns = [
     url(r'^rest-auth/login/$', LoginView.as_view(), name='rest_login'),
     url(r'^rest-auth/', include('rest_auth.urls')),
     url(r'^rest-auth/registration/', include('rest_auth.registration.urls')),
-    # path('rest-auth/set-auth-method', SetMethodView.as_view(), name='set-auth-method'),
     path('rest-auth/login/request-code/', RequestConfirmationCodeView.as_view(), name='request-2fa-code'),
     path('rest-auth/phone/', SetPhoneView.as_view(), name='update-phone')
 ]

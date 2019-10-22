@@ -149,14 +149,14 @@ class LoginTest(APITestCase):
             'confirmation_code': "1234567"
         }
         # As it turned out, the python authy.api is not very neatly
-        # implemented in the underlying part:
+        # implemented in the given part:
         #
         # def ok(self):
         #     if super(Token, self).ok():
         #         return '"token":"is valid"' in str(self.response.content)
         # return False
         #
-        # So, i've got to declare following content constant in that way:
+        # So, i've got to declare following and relative constants in that way:
         self.authy_ok_content = '''
             {
               "message": "Token is valid.",
@@ -357,6 +357,7 @@ class UpdatePhoneTest(APITestCase):
         self.assertEqual(response.status_code, 304)
         self.assertDictEqual(response.data, {'email': 'is invalid', 'message': 'User was not valid'})
 
+        # such code and error data used cause there is no info in documentation. and in api code only status==200 used
         response = self._mocked_authy_update_req(
             self.payload, delete_code=401,
             delete_data={"errors": {"something": "is invalid", "message": "User removal failed"}}
