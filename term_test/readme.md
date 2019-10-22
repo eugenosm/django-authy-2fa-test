@@ -7,8 +7,8 @@ API Endpoints
 `/rest-auth/user/`  
 Allow: GET, PUT, PATCH, HEAD  
 
-    - on GET/PUT/PATCH: returns: 'email', 'username', 'auth_method', 'authy_id'
-    - on PUT allow to change auth_method. values 'SMS' (sms confirm) and 
+    - On GET/PUT/PATCH: returns: 'email', 'username', 'auth_method', 'authy_id'
+    - On PUT allow to change auth_method. Values: 'SMS' (sms confirm) and 
       'ATH'(authy one touch confirm)
 ```json
 # HTTP 200 OK
