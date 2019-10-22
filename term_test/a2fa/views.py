@@ -38,12 +38,14 @@ class RequestConfirmationCodeView(GenericAPIView):
             user = request.user
         else:
             user = serializer.validated_data['user']
+        if not user or user.is_anonymous or not user.is_active:
+            return Response(data={'error': 'Invalid user'}, status=status.HTTP_401_UNAUTHORIZED)
         if user.auth_method == User.USE_SMS:
             sms = authy_api.users.request_sms(user.authy_id, {'force': True})
             if sms.ok():
                 return Response(data=sms.content, status=status.HTTP_200_OK)
             else:
-                return Response(data={'error': 'SMS request failed'}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+                return Response(data={'error': 'SMS request failed'}, status=status.HTTP_401_UNAUTHORIZED)
         if user.auth_method == User.USE_Authy:
             details = {
                 'user': user.username,
@@ -101,6 +103,9 @@ class SetPhoneView(UpdateAPIView):
     def update(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        if not request.user or request.user.is_anonymous or not request.user.is_active:
+            return Response(data={'error': 'Invalid credentials or not logged in'}, status=status.HTTP_401_UNAUTHORIZED)
+
         old_authy_user = request.user.authy_id
         auty_user = authy_api.users.create(
             email=request.user.email,
