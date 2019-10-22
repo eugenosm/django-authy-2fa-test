@@ -5,7 +5,7 @@ API Endpoints
 
 #### User Details
 `/rest-auth/user/`  
-Allow: GET, PUT, PATCH, HEAD  
+Allow: GET, PUT, PATCH
 
     - On GET/PUT/PATCH: returns: 'email', 'username', 'auth_method', 'authy_id'
     - On PUT allow to change auth_method. Values: 'SMS' (sms confirm) and 
