@@ -1,3 +1,5 @@
+import uuid
+
 from django.shortcuts import render
 from django.conf import settings
 from django.contrib.auth import authenticate
@@ -52,7 +54,7 @@ class RequestConfirmationCodeView(GenericAPIView):
                 'application': 'A2FA Test App'
             }
             response = authy_api.one_touch.send_request(
-                user.authy_id, "Login requested for A2FA Test App", details=details, seconds_to_expire=120)
+                int(user.authy_id), "Login requested for A2FA Test App", details=details, seconds_to_expire=120)
             if response.ok():
                 return Response(data={'uuid': response.get_uuid()}, status=status.HTTP_200_OK)
             else:
@@ -75,8 +77,11 @@ class LoginView(RestAuthLoginView):
     def login(self):
         self.user = self.serializer.validated_data['user']
         confirmation_code = self.serializer.validated_data['confirmation_code']
+        if self.user.auth_method == User.USE_Authy:
+            verification = authy_api.one_touch.get_approval_status(confirmation_code)
+        else:
+            verification = authy_api.tokens.verify(self.user.authy_id, token=confirmation_code)
 
-        verification = authy_api.tokens.verify(self.user.authy_id, token=confirmation_code)
         if verification.ok():
             if getattr(settings, 'REST_USE_JWT', False):
                 self.token = jwt_encode(self.user)
